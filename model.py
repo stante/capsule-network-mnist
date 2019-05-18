@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
+import torch
 
 
 class CapsuleNetwork(nn.Module):
@@ -13,5 +14,9 @@ class CapsuleNetwork(nn.Module):
         x = F.relu(self.conv1(x))
         x = self.conv2(x)
         x = self.conv3(x)
+        x = x.view(-1, 10, 16)
+        x = x * x
+        x = torch.sum(x, dim=2)
+        x = torch.sqrt(x)
 
-        return x.view(-1, 10, 16)
+        return x.view(-1, 10)
